@@ -238,6 +238,7 @@ public class CritterFunctionalTest {
         List<ScheduleDTO> scheds2c = scheduleController.getScheduleForCustomer(userController.getOwnerByPet(sched2.getPetIds().get(0)).getId());
         compareSchedules(sched2, scheds2c.get(0));
         compareSchedules(sched3, scheds2c.get(1));
+
     }
 
 

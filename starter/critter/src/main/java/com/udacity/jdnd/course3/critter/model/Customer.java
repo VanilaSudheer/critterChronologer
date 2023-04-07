@@ -1,17 +1,23 @@
-package com.udacity.jdnd.course3.critter.user;
+package com.udacity.jdnd.course3.critter.model;
 
-import java.util.List;
+import lombok.Data;
+import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 
-/**
- * Represents the form that customer request and response data takes. Does not map
- * to the database directly.
- */
-public class CustomerDTO {
+import javax.persistence.*;
+import java.util.Set;
+@Entity
+public class Customer {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "customer_id")
     private long id;
+
     private String name;
     private String phoneNumber;
     private String notes;
-    private List<Long> petIds;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner", cascade = CascadeType.ALL)
+    private Set<Pet> pets;
 
     public long getId() {
         return id;
@@ -45,13 +51,11 @@ public class CustomerDTO {
         this.notes = notes;
     }
 
-    public List<Long> getPetIds() {
-        return petIds;
+    public Set<Pet> getPets() {
+        return pets;
     }
 
-    public void setPetIds(List<Long> petIds) {
-        this.petIds = petIds;
+    public void setPets(Set<Pet> pets) {
+        this.pets = pets;
     }
-
-
 }
