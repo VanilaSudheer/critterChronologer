@@ -28,22 +28,22 @@ public class ScheduleService {
     @Autowired
     ScheduleEmployeeService scheduleEmployeeService;
     public ScheduleDTO createSchedule(ScheduleDTO scheduleDTO){
-
         Schedule schedule = new Schedule();
         schedule.setDate(scheduleDTO.getDate());
 
-        scheduleRepository.save(schedule);
+        Schedule savedSchedule = scheduleRepository.save(schedule);
 
-        schedule.setSkills(scheduleSkillService.addMultiple(scheduleDTO, schedule));
+        savedSchedule.setSkills(scheduleSkillService.addMultiple(scheduleDTO, savedSchedule));
 
-        schedule.setPets(schedulePetService.addMultiple(scheduleDTO, schedule));
+        savedSchedule.setPets(schedulePetService.addMultiple(scheduleDTO, savedSchedule));
 
-        schedule.setEmployees(scheduleEmployeeService.addMultiple(scheduleDTO, schedule));
-
-        Schedule savedSchdule = scheduleRepository.save(schedule);
+        savedSchedule.setEmployees(scheduleEmployeeService.addMultiple(scheduleDTO, savedSchedule));
 
 
-        return toDTO(savedSchdule);
+
+
+        return toDTO(scheduleRepository.save(savedSchedule));
+
 
     }
     public List<ScheduleDTO> getAllSchedules(){
@@ -88,12 +88,12 @@ public class ScheduleService {
 
     public List<ScheduleDTO> getScheduleForEmployee(Long empId){
 
-        Set<Schedule> scheds = new HashSet<Schedule>();
+        Set<Schedule> schedules = new HashSet<Schedule>();
 
         for(ScheduleEmployee spet : scheduleEmployeeService.getScheduleForEmployee(empId)) {
-            scheds.add(spet.getSchedule());
+            schedules.add(spet.getSchedule());
         }
-
+/*
         Iterator<Schedule> schedIterator = scheds.iterator();
 
         List<ScheduleDTO> returnList = new ArrayList<ScheduleDTO>();
@@ -102,17 +102,26 @@ public class ScheduleService {
             returnList.add( toDTO(tmpSched) );
         }
 
+
+
         return returnList;
 
+ */
+        return toScheduleDTO(schedules);
+
     }
+
+
 
     public List<ScheduleDTO> getScheduleForCustomer(Long custId){
 
-        Set<Schedule> scheds = new HashSet<Schedule>();
+        Set<Schedule> schedules = new HashSet<Schedule>();
+//todo
 
         for(SchedulePet spet : schedulePetService.getScheduleForCustomer(custId.longValue())) {
-            scheds.add(spet.getSchedule());
+            schedules.add(spet.getSchedule());
         }
+        /*
 
         Iterator<Schedule> schedIterator = scheds.iterator();
 
@@ -124,8 +133,21 @@ public class ScheduleService {
 
         return returnList;
 
+         */
+        return toScheduleDTO(schedules);
+
     }
 
+    private List<ScheduleDTO> toScheduleDTO(Set<Schedule> schedules) {
+        Iterator<Schedule> schedIterator = schedules.iterator();
+
+        List<ScheduleDTO> returnList = new ArrayList<ScheduleDTO>();
+        while (schedIterator.hasNext()) {
+            Schedule tmpSched = schedIterator.next();
+            returnList.add(toDTO(tmpSched));
+        }
+        return returnList;
+    }
 
     private ScheduleDTO toDTO(Schedule entity) {
         ScheduleDTO dto = new ScheduleDTO();
@@ -135,8 +157,8 @@ public class ScheduleService {
         List<Long> petIds = new ArrayList<Long>();
 
         if(null != entity.getPets()) {
-            for(SchedulePet pet : entity.getPets()) {
-                petIds.add(pet.getPet().getId());
+            for(SchedulePet scPet : entity.getPets()) {
+                petIds.add(scPet.getPet().getId());
             }
         }
 

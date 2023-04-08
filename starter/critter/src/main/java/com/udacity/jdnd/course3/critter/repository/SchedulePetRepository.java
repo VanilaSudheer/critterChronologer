@@ -14,7 +14,7 @@ import java.util.List;
 public interface SchedulePetRepository extends CrudRepository<SchedulePet,Long> {
     List<SchedulePet> findSchedulePetsBySchedule(Schedule schedule);
     List<SchedulePet> findSchedulePetsByPet(Pet pet);
-    @Query(value = "SELECT id FROM schedule_pet where pet_id in (SELECT id from pet where customer_id = :cusId)", nativeQuery = true)
+    @Query(value = "SELECT id FROM schedule_pet WHERE pet_id in (SELECT id FROM pet WHERE customer_id = :cusId)", nativeQuery = true)
 
     ArrayList<Long> findSchedulePetsByCustomerId(@Param("cusId") Long cusId);
 }

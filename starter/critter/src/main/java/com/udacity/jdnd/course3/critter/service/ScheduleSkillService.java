@@ -39,8 +39,8 @@ public class ScheduleSkillService {
                 ScheduleSkill schedSkill = new ScheduleSkill();
                 schedSkill.setEmployeeSkill(skill);
                 schedSkill.setSchedule(schedule);
-                scheduleSkillRepository.save(schedSkill);
-                allList.add(schedSkill);
+                ScheduleSkill savedScSkill = scheduleSkillRepository.save(schedSkill);
+                allList.add(savedScSkill);
 
             }
         }
@@ -55,12 +55,12 @@ public class ScheduleSkillService {
 
         Schedule schedule = scheduleRepository.findById(scheduleId.longValue());
 
-        List<ScheduleSkill> empList = scheduleSkillRepository.findScheduleSkillsBySchedule(schedule);
+        List<ScheduleSkill> scSkillList = scheduleSkillRepository.findScheduleSkillsBySchedule(schedule);
         Set<EmployeeSkill> empSkill = new HashSet<EmployeeSkill>();
 
-        for(ScheduleSkill esm : empList) {
+        for(ScheduleSkill scSkill : scSkillList) {
 
-            empSkill.add(esm.getEmployeeSkill());
+            empSkill.add(scSkill.getEmployeeSkill());
 
         }
 

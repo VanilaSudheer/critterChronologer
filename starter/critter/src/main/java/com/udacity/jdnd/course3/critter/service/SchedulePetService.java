@@ -1,5 +1,6 @@
 package com.udacity.jdnd.course3.critter.service;
 
+import com.udacity.jdnd.course3.critter.model.Customer;
 import com.udacity.jdnd.course3.critter.model.Pet;
 import com.udacity.jdnd.course3.critter.model.Schedule;
 import com.udacity.jdnd.course3.critter.model.SchedulePet;
@@ -42,8 +43,8 @@ public class SchedulePetService {
                 SchedulePet schedPet = new SchedulePet();
                 schedPet.setPet(pet);
                 schedPet.setSchedule(schedule);
-                schedulePetRepository.save(schedPet);
-                allList.add(schedPet);
+                SchedulePet savedScPet = schedulePetRepository.save(schedPet);
+                allList.add(savedScPet);
 
             }
         }
@@ -61,9 +62,9 @@ public class SchedulePetService {
         List<SchedulePet> petList = schedulePetRepository.findSchedulePetsBySchedule(schedule);
         List<Long> petIds = new ArrayList<Long>();
 
-        for(SchedulePet esm : petList) {
+        for(SchedulePet scpet : petList) {
 
-            petIds.add(esm.getPet().getId());
+            petIds.add(scpet.getPet().getId());
 
         }
 
@@ -77,6 +78,7 @@ public class SchedulePetService {
     }
     public List<SchedulePet> getScheduleForCustomer(long customerId){
 
+
         List<Long> schedPetIds = schedulePetRepository.findSchedulePetsByCustomerId(customerId);
 
         List<SchedulePet> schedLists = new ArrayList<>();
@@ -89,6 +91,19 @@ public class SchedulePetService {
 
         return schedLists;
 
+        /*
+        Customer customer = customerRepository.findById(customerId);
+        List<Schedule> schedules = scheduleRepository.getAllByPetsIn(customer.getPets());
+
+        List<SchedulePet> schedulePets= new ArrayList<>();
+        for (Schedule schedule : schedules) {
+            schedulePets.add((SchedulePet) schedule.getPets());
+        }
+
+        return schedulePets;
+
+
+         */
     }
 
 }

@@ -39,8 +39,8 @@ public class ScheduleEmployeeService {
                 ScheduleEmployee schedEmp = new ScheduleEmployee();
                 schedEmp.setEmployee(emp);
                 schedEmp.setSchedule(schedule);
-                scheduleEmployeeRepository.save(schedEmp);
-                empList.add(schedEmp);
+                ScheduleEmployee savedScEmp = scheduleEmployeeRepository.save(schedEmp);
+                empList.add(savedScEmp);
 
             }
         }
@@ -58,9 +58,9 @@ public class ScheduleEmployeeService {
         List<ScheduleEmployee> empList = scheduleEmployeeRepository.findScheduleEmployeesBySchedule(schedule);
         List<Long> empIds = new ArrayList<Long>();
 
-        for(ScheduleEmployee esm : empList) {
+        for(ScheduleEmployee scEmp : empList) {
 
-            empIds.add(esm.getEmployee().getId());
+            empIds.add(scEmp.getEmployee().getId());
 
         }
 
